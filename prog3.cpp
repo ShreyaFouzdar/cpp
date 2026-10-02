@@ -1,33 +1,52 @@
 #include <iostream>
-#include <string>
-#include <cctype>
-
 using namespace std;
 
+class Counter {
+    int v;
+
+public:
+    Counter(int v = 0) : v(v) {}
+
+    Counter& operator++() {
+        ++v;
+        return *this;
+    }                                      
+
+    Counter operator++(int) {
+        Counter t = *this;
+        ++v;
+        return t;
+    }                                     
+
+    int value() const {
+        return v;
+    }
+};
+
+class SafeArr {
+    int a[5] = {10, 20, 30, 40, 50};
+
+public:
+    int& operator[](int i) {
+        if (i < 0 || i >= 5) {
+            cout << "out of range\n";
+            return a[0];
+        }
+        return a[i];
+    }                                    
+};
+
 int main() {
-    string s = "verification";
+    Counter c(5);
+    ++c;
+    c++;                                 
 
-    cout << "First 4 : " << s.substr(0, 4) << endl;    
-    cout << "From 4  : " << s.substr(4) << endl;       
+    cout << "Counter = " << c.value() << endl;
 
-    int c = s.compare("verify");                       
+    SafeArr s;
+    cout << "s[2] = " << s[2] << endl;    
 
-    cout << "compare vs 'verify': "
-         << (c < 0 ? "<" : c > 0 ? ">" : "=") << endl;
-
-    int freq[26] = {0};
-
-    for (char ch : s)
-        if (isalpha((unsigned char)ch))
-            freq[tolower(ch) - 'a']++;
-
-    cout << "Letter counts: ";
-
-    for (int i = 0; i < 26; ++i)
-        if (freq[i])
-            cout << char('a' + i) << ":" << freq[i] << " ";
-
-    cout << endl;
+    s[10] = 99;                            
 
     return 0;
 }

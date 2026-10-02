@@ -1,30 +1,30 @@
 #include <iostream>
-using namespace std;    
+using namespace std;
 
-void swapRef(int &a, int &b) {
-    int t = a;
-    a = b;
-    b = t;
-}
+class Complex {
+    double re, im;
 
-void swapPtr(int *a, int *b) {
-    int t = *a;
-    *a = *b;
-    *b = t;
-}
+public:
+    Complex(double r = 0, double i = 0) : re(r), im(i) {}
+
+    Complex operator+(const Complex &o) const {      
+        return Complex(re + o.re, im + o.im);
+    }
+
+    bool operator==(const Complex &o) const {        
+        return re == o.re && im == o.im;
+    }
+    
+    friend ostream& operator<<(ostream& os, const Complex &c) {
+        os << c.re << (c.im >= 0 ? "+" : "") << c.im << "i";
+        return os;                                  
+    }
+};
 
 int main() {
-    int x = 10, y = 20;
+    Complex a(2, 3), b(1, 4);
 
-    swapRef(x, y);         
-    cout << "After swapRef: x=" << x << " y=" << y << endl;
-
-    swapPtr(&x, &y);        
-    cout << "After swapPtr: x=" << x << " y=" << y << endl;
-
-    int &alias = x;         
-    alias = 99;            
-    cout << "x via alias = " << x << endl;
-
-    return 0;
+    cout << "a = " << a << ", b = " << b << endl;
+    cout << "a + b = " << (a + b) << endl;
+    cout << "a == b ? " << (a == b ? "yes" : "no") << endl;
 }
